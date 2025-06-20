@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class EmployeeProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
     bio = models.TextField(blank=True, null=True)
     position = models.CharField(max_length=100)
     joined_at = models.DateTimeField(auto_now_add=True)
