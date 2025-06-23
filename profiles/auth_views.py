@@ -55,11 +55,14 @@ def logout(request):
     """Logout user by blacklisting the refresh token"""
     try:
         refresh_token = request.data["refresh"]
+        print(f"Received refresh token: {refresh_token}")  # Add this line
         token = RefreshToken(refresh_token)
         token.blacklist()
         return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
     except Exception as e:
+        print(f"Logout error: {str(e)}")  # Add this for better error tracking
         return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
