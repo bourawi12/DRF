@@ -10,6 +10,8 @@ from rest_framework_simplejwt.views import (
 )
 from profiles import views
 from profiles.auth_views import register, logout, user_profile, protected_test
+from profiles.views import ProfileSkillsView  # Import your new view here
+
 
 # Create router and register viewsets
 router = DefaultRouter()
@@ -21,10 +23,10 @@ router.register(r'projects', views.ProjectViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    # API endpoints
+
+    # API endpoints via router
     path('api/', include(router.urls)),
-    
+
     # JWT Authentication endpoints
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -33,7 +35,10 @@ urlpatterns = [
     path('api/auth/logout/', logout, name='logout'),
     path('api/auth/user/', user_profile, name='user_profile'),
     path('api/auth/test/', protected_test, name='protected_test'),
-    
+
+    # Your new custom URL
+    path('api/profiles/<int:profile_id>/skills/', ProfileSkillsView.as_view(), name='profile-skills'),
+
     # DRF Browsable API (for development)
     path('api-auth/', include('rest_framework.urls')),
 ]

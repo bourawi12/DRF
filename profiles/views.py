@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-
+from rest_framework.views import APIView
 from .models import EmployeeProfile, Skill, Education, Certification, Project
 from .serializers import (
     EmployeeProfileSerializer, 
@@ -171,3 +171,17 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 {'detail': 'Profile not found'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
+class ProfileSkillsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, profile_id):
+        # Try to get the profile by id
+        try:
+            profile = EmployeeProfile.objects.get(id=profile_id)
+        except EmployeeProfile.DoesNotExist:
+            return Response({'detail': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Filter skills by the profile
+        skills = Skill.objects.filter(profile=profile)
+        serializer = SkillSerializer(skills, many=True)
+        return Response(serializer.data)
