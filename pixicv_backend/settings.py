@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',  # Add this
-    'profiles',
+   
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+    'profiles.apps.ProfilesConfig',  # Ensure your app is included
 ]
 
 MIDDLEWARE = [
