@@ -185,3 +185,15 @@ class ProfileSkillsView(APIView):
         skills = Skill.objects.filter(profile=profile)
         serializer = SkillSerializer(skills, many=True)
         return Response(serializer.data)
+class ProfileProjectsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, profile_id):
+        try:
+            profile = EmployeeProfile.objects.get(id=profile_id)
+        except EmployeeProfile.DoesNotExist:
+            return Response({'detail': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        projects = Project.objects.filter(profile=profile)
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data)
